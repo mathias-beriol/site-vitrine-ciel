@@ -1,0 +1,346 @@
+/* =============================================
+   STYLE MODERNE CLAIR – Morpion BAC PRO CIEL
+   ============================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Space+Grotesk:wght@500;700&display=swap');
+
+/* --- Variables --- */
+:root {
+    --bg-start:   #e8f0fe;
+    --bg-end:     #fce4ec;
+    --surface:    #ffffff;
+    --surface2:   #f5f7ff;
+    --border:     #e0e7ff;
+    --bleu:       #4f6ef7;
+    --bleu-hover: #3a57e8;
+    --rouge:      #f25c7a;
+    --texte:      #1a1d2e;
+    --gris:       #7c83a0;
+    --shadow:     0 8px 32px rgba(79, 110, 247, 0.13);
+    --radius:     16px;
+}
+
+/* --- Reset --- */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* --- Body avec fond dégradé animé --- */
+body {
+    font-family: 'Outfit', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: linear-gradient(135deg, var(--bg-start) 0%, #fff 50%, var(--bg-end) 100%);
+    background-size: 400% 400%;
+    animation: gradientFlow 10s ease infinite;
+    color: var(--texte);
+    padding-bottom: 40px;
+}
+
+@keyframes gradientFlow {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Motif de points en fond */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-image: radial-gradient(circle, #4f6ef720 1px, transparent 1px);
+    background-size: 28px 28px;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* =============================================
+   EN-TÊTE
+   ============================================= */
+header {
+    text-align: center;
+    padding: 48px 20px 24px;
+    position: relative;
+    z-index: 1;
+    animation: slideDown 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes slideDown {
+    from { transform: translateY(-30px); opacity: 0; }
+    to   { transform: translateY(0);     opacity: 1; }
+}
+
+.badge {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--bleu), #a78bfa);
+    color: #fff;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    padding: 5px 16px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 14px rgba(79, 110, 247, 0.3);
+}
+
+h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 2.6rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--bleu), var(--rouge));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+}
+
+.sous-titre {
+    color: var(--gris);
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+/* =============================================
+   CONTENU PRINCIPAL
+   ============================================= */
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 22px;
+    width: 100%;
+    max-width: 440px;
+    padding: 0 20px;
+    position: relative;
+    z-index: 1;
+    animation: fadeIn 0.7s ease 0.2s both;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* =============================================
+   SCORES
+   ============================================= */
+#scores {
+    display: flex;
+    gap: 14px;
+    width: 100%;
+}
+
+.score-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: var(--surface);
+    padding: 14px 8px;
+    border-radius: var(--radius);
+    border: 2px solid var(--border);
+    box-shadow: var(--shadow);
+    transition: transform 0.2s;
+}
+
+.score-item:hover { transform: translateY(-3px); }
+
+.score-item:first-child { border-top: 4px solid var(--bleu); }
+.score-item.nul         { border-top: 4px solid #a78bfa; }
+.score-item.bot         { border-top: 4px solid var(--rouge); }
+
+.score-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--gris);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+}
+
+.score-valeur {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--texte);
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.score-valeur.bump {
+    animation: scoreBump 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes scoreBump {
+    0%   { transform: scale(1); }
+    50%  { transform: scale(1.4); }
+    100% { transform: scale(1); }
+}
+
+/* =============================================
+   STATUT
+   ============================================= */
+#statut {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--texte);
+    min-height: 1.6rem;
+    text-align: center;
+    background: var(--surface);
+    padding: 10px 24px;
+    border-radius: 30px;
+    border: 2px solid var(--border);
+    box-shadow: var(--shadow);
+    transition: all 0.3s ease;
+}
+
+/* =============================================
+   GRILLE
+   ============================================= */
+#grille {
+    display: grid;
+    grid-template-columns: repeat(3, 110px);
+    grid-template-rows: repeat(3, 110px);
+    gap: 10px;
+    background: var(--surface);
+    padding: 16px;
+    border-radius: 24px;
+    border: 2px solid var(--border);
+    box-shadow: var(--shadow);
+}
+
+.case {
+    width: 110px;
+    height: 110px;
+    background: var(--surface2);
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.8rem;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, transform 0.15s, box-shadow 0.15s;
+    user-select: none;
+}
+
+.case:hover:not(.joueur):not(.bot) {
+    background: #eef1ff;
+    border-color: var(--bleu);
+    transform: scale(1.06);
+    box-shadow: 0 4px 16px rgba(79, 110, 247, 0.18);
+}
+
+/* Symbole joueur (X) */
+.case.joueur {
+    color: var(--bleu);
+    cursor: default;
+    border-color: #c7d2fe;
+    background: #eef1ff;
+}
+
+/* Symbole bot (O) */
+.case.bot {
+    color: var(--rouge);
+    cursor: default;
+    border-color: #fecdd3;
+    background: #fff1f2;
+}
+
+/* Animation apparition */
+.case.anime {
+    animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes popIn {
+    0%   { transform: scale(0); opacity: 0; rotate: -15deg; }
+    70%  { transform: scale(1.1); rotate: 5deg; }
+    100% { transform: scale(1); opacity: 1; rotate: 0deg; }
+}
+
+/* Cases gagnantes */
+.case.gagnant {
+    border-color: var(--bleu) !important;
+    background: linear-gradient(135deg, #eef1ff, #e0e7ff) !important;
+    animation: winPulse 0.6s ease-in-out infinite alternate;
+}
+
+.case.gagnant.bot {
+    border-color: var(--rouge) !important;
+    background: linear-gradient(135deg, #fff1f2, #fce7eb) !important;
+    animation: winPulseRouge 0.6s ease-in-out infinite alternate;
+}
+
+@keyframes winPulse {
+    from { box-shadow: 0 0 0 0 rgba(79, 110, 247, 0.3); }
+    to   { box-shadow: 0 0 0 8px rgba(79, 110, 247, 0); }
+}
+
+@keyframes winPulseRouge {
+    from { box-shadow: 0 0 0 0 rgba(242, 92, 122, 0.3); }
+    to   { box-shadow: 0 0 0 8px rgba(242, 92, 122, 0); }
+}
+
+/* =============================================
+   BOUTON REJOUER
+   ============================================= */
+#btn-rejouer {
+    position: relative;
+    padding: 14px 40px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #fff;
+    background: linear-gradient(135deg, var(--bleu), #a78bfa);
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 6px 20px rgba(79, 110, 247, 0.35);
+    letter-spacing: 0.5px;
+}
+
+/* Effet brillance au hover */
+#btn-rejouer::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -60%;
+    width: 40%;
+    height: 200%;
+    background: rgba(255,255,255,0.25);
+    transform: skewX(-20deg);
+    transition: left 0.4s ease;
+}
+
+#btn-rejouer:hover::before {
+    left: 130%;
+}
+
+#btn-rejouer:hover {
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 10px 28px rgba(79, 110, 247, 0.45);
+}
+
+#btn-rejouer:active {
+    transform: translateY(0) scale(0.98);
+}
+
+/* =============================================
+   PIED DE PAGE
+   ============================================= */
+footer {
+    margin-top: 40px;
+    padding: 20px;
+    text-align: center;
+    color: var(--gris);
+    font-size: 0.85rem;
+    font-weight: 500;
+    position: relative;
+    z-index: 1;
+}
+
+footer strong {
+    color: var(--bleu);
+}

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BAC PRO CIEL – Morpion</title>
+    <link rel="stylesheet" href="site.css">
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav>
+        <div class="nav-inner">
+            <div class="nav-logo">Projet CIEL <span>BAC PRO</span></div>
+            <ul class="nav-links">
+                <li><a href="accueil.html">🏠 Accueil</a></li>
+                <li><a href="photos.html">🖼️ Photos</a></li>
+                <li><a href="videos.html">🎬 Vidéos</a></li>
+                <li><a href="morpion.html" class="active">🎮 Morpion</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- CONTENU -->
+    <div class="page-wrapper">
+
+        <div class="section-header">
+            <h2>Jeu de Morpion</h2>
+            <span class="count">IA</span>
+        </div>
+
+        <!-- Description -->
+        <div style="background:#fff; border:1px solid var(--border); border-left:4px solid var(--rouge); border-radius:var(--radius); padding:16px 20px; margin-bottom:24px; box-shadow:var(--shadow); display:flex; align-items:center; gap:16px;">
+            <span style="font-size:2rem;">🤖</span>
+            <div>
+                <div style="font-weight:700; margin-bottom:4px;">Affronte le bot !</div>
+                <div style="font-size:0.88rem; color:var(--gris);">
+                    Tu joues les <strong>✕</strong>. Le bot bloque tes alignements et cherche à gagner —
+                    mais tu peux le piéger avec une double menace. Bonne chance !
+                </div>
+            </div>
+        </div>
+
+        <!-- Jeu intégré dans une iframe -->
+        <div class="jeu-wrapper">
+            <iframe src="index.html" title="Jeu de Morpion"></iframe>
+        </div>
+
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>Projet réalisé dans le cadre du <strong>BAC PRO CIEL</strong> &mdash; Année 2024/2025</p>
+    </footer>
+
+</body>
+</html>

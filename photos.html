@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BAC PRO CIEL – Photos</title>
+    <link rel="stylesheet" href="site.css">
+    <style>
+        /* Lightbox */
+        .lightbox {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.85);
+            z-index: 999;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .lightbox.open { display: flex; }
+        .lightbox img {
+            max-width: 90vw;
+            max-height: 80vh;
+            border-radius: 8px;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+        }
+        .lightbox-close {
+            position: absolute;
+            top: 20px; right: 28px;
+            font-size: 2rem;
+            color: #fff;
+            cursor: pointer;
+            background: none;
+            border: none;
+            line-height: 1;
+        }
+        .lightbox-caption {
+            color: #fff;
+            font-size: 0.95rem;
+            text-align: center;
+        }
+
+        /* Zone d'ajout */
+        .upload-zone {
+            border: 2px dashed var(--border);
+            border-radius: var(--radius);
+            padding: 40px;
+            text-align: center;
+            color: var(--gris);
+            background: var(--surface);
+            margin-bottom: 32px;
+            cursor: pointer;
+            transition: border-color 0.2s, background 0.2s;
+        }
+        .upload-zone:hover {
+            border-color: var(--rouge);
+            background: #fff8f8;
+        }
+        .upload-zone .upload-icon { font-size: 2.5rem; margin-bottom: 10px; }
+        .upload-zone p { font-size: 0.9rem; }
+        .upload-zone input { display: none; }
+
+        /* Photo cards cliquables */
+        .card-thumb { cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav>
+        <div class="nav-inner">
+            <div class="nav-logo">Projet CIEL <span>BAC PRO</span></div>
+            <ul class="nav-links">
+                <li><a href="accueil.html">🏠 Accueil</a></li>
+                <li><a href="photos.html" class="active">🖼️ Photos</a></li>
+                <li><a href="videos.html">🎬 Vidéos</a></li>
+                <li><a href="avis.html">⭐ Avis</a></li>
+                
+            </ul>
+        </div>
+    </nav>
+
+    <!-- CONTENU -->
+    <div class="page-wrapper">
+
+        <div class="section-header">
+            <h2>Galerie Photos</h2>
+            <span class="count" id="photo-count">0</span>
+        </div>
+
+        <!-- Zone d'ajout de photos -->
+        <label class="upload-zone" for="input-photo">
+            <div class="upload-icon">📷</div>
+            <p><strong>Cliquez pour ajouter des photos</strong> ou glissez-déposez ici</p>
+            <p style="font-size:0.8rem; margin-top:6px;">JPG, PNG, GIF acceptés</p>
+            <input type="file" id="input-photo" accept="image/*" multiple>
+        </label>
+
+        <!-- Grille de photos -->
+        <div class="cards-grid" id="photo-grid">
+            <p style="color:var(--gris); font-size:0.95rem;" id="empty-msg">
+                Aucune photo pour l'instant. Ajoutez-en avec le bouton ci-dessus !
+            </p>
+        </div>
+
+    </div>
+
+    <!-- LIGHTBOX -->
+    <div class="lightbox" id="lightbox">
+        <button class="lightbox-close" onclick="fermerLightbox()">✕</button>
+        <img id="lightbox-img" src="" alt="">
+        <div class="lightbox-caption" id="lightbox-caption"></div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>Projet réalisé dans le cadre du <strong>BAC PRO CIEL</strong> &mdash; Année 2026</p>
+    </footer>
+
+    <script>
+        const input     = document.getElementById("input-photo");
+        const grid      = document.getElementById("photo-grid");
+        const countEl   = document.getElementById("photo-count");
+        const emptyMsg  = document.getElementById("empty-msg");
+        let photos = [];
+
+        input.addEventListener("change", e => {
+            const files = Array.from(e.target.files);
+            files.forEach(file => {
+                const reader = new FileReader();
+                reader.onload = ev => {
+                    photos.push({ src: ev.target.result, nom: file.name });
+                    afficherPhotos();
+                };
+                reader.readAsDataURL(file);
+            });
+        });
+
+        // Glisser-déposer
+        const uploadZone = document.querySelector(".upload-zone");
+        uploadZone.addEventListener("dragover", e => { e.preventDefault(); uploadZone.style.borderColor = "var(--rouge)"; });
+        uploadZone.addEventListener("dragleave", () => { uploadZone.style.borderColor = "var(--border)"; });
+        uploadZone.addEventListener("drop", e => {
+            e.preventDefault();
+            uploadZone.style.borderColor = "var(--border)";
+            const files = Array.from(e.dataTransfer.files).filter(f => f.type.startsWith("image/"));
+            files.forEach(file => {
+                const reader = new FileReader();
+                reader.onload = ev => {
+                    photos.push({ src: ev.target.result, nom: file.name });
+                    afficherPhotos();
+                };
+                reader.readAsDataURL(file);
+            });
+        });
+
+        function afficherPhotos() {
+            if (emptyMsg) emptyMsg.remove();
+            grid.innerHTML = "";
+            countEl.textContent = photos.length;
+
+            photos.forEach((photo, idx) => {
+                const card = document.createElement("div");
+                card.className = "card fade-in";
+                card.innerHTML = `
+                    <div class="card-thumb" onclick="ouvrirLightbox(${idx})">
+                        <img src="${photo.src}" alt="${photo.nom}">
+                    </div>
+                    <div class="card-body">
+                        <div class="card-title">${photo.nom}</div>
+                        <div class="card-meta" style="display:flex;justify-content:space-between;">
+                            <span>Photo ${idx + 1}</span>
+                            <span style="color:var(--rouge);cursor:pointer;" onclick="supprimerPhoto(${idx})">🗑️ Supprimer</span>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function supprimerPhoto(idx) {
+            photos.splice(idx, 1);
+            if (photos.length === 0) {
+                grid.innerHTML = `<p style="color:var(--gris); font-size:0.95rem;">Aucune photo pour l'instant. Ajoutez-en avec le bouton ci-dessus !</p>`;
+                countEl.textContent = 0;
+            } else {
+                afficherPhotos();
+            }
+        }
+
+        function ouvrirLightbox(idx) {
+            document.getElementById("lightbox").classList.add("open");
+            document.getElementById("lightbox-img").src = photos[idx].src;
+            document.getElementById("lightbox-caption").textContent = photos[idx].nom;
+        }
+
+        function fermerLightbox() {
+            document.getElementById("lightbox").classList.remove("open");
+        }
+
+        // Fermer en cliquant en dehors
+        document.getElementById("lightbox").addEventListener("click", function(e) {
+            if (e.target === this) fermerLightbox();
+        });
+    </script>
+
+</body>
+</html>
